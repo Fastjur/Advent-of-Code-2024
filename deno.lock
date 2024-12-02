@@ -1,0 +1,15 @@
+{
+  "version": "4",
+  "specifiers": {
+    "npm:@types/lodash@*": "4.17.13",
+    "npm:lodash@*": "4.17.21"
+  },
+  "npm": {
+    "@types/lodash@4.17.13": {
+      "integrity": "sha512-lfx+dftrEZcdBPczf9d0Qv0x+j/rfNCMuC6OcfXmO8gkfeNAY88PgKUbvG56whcN23gc27yenwF6oJZXGFpYxg=="
+    },
+    "lodash@4.17.21": {
+      "integrity": "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
+    }
+  }
+}
