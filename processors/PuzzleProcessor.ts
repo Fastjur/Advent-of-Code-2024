@@ -8,6 +8,8 @@ import { Day03Part01Strategy } from "./strategies/day03/Day03Part01Strategy.ts";
 import { Day03Part02Strategy } from "./strategies/day03/Day03Part02Strategy.ts";
 import { Day04Part01Strategy } from "./strategies/day04/Day04Part01Strategy.ts";
 import { Day04Part02Strategy } from "./strategies/day04/Day04Part02Strategy.ts";
+import { Day05Part01Strategy } from "./strategies/day05/Day05Part01Strategy.ts";
+import { Day05Part02Strategy } from "./strategies/day05/Day05Part02Strategy.ts";
 
 export interface IPuzzleProcessor {
   process(day: ValidDays, part: PuzzlePart, input: string): string;
@@ -41,6 +43,10 @@ export class PuzzleProcessor implements IPuzzleProcessor {
         return part === PuzzlePart.PART_01
           ? new Day04Part01Strategy()
           : new Day04Part02Strategy();
+      case ValidDays.DAY_05:
+        return part === PuzzlePart.PART_01
+          ? new Day05Part01Strategy()
+          : new Day05Part02Strategy();
       default:
         throw new Error(`Strategy not implemented for day: ${day}`);
     }
