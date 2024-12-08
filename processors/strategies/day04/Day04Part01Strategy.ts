@@ -1,5 +1,3 @@
-// @ts-types="npm:@types/lodash"
-import _ from "npm:lodash";
 import { PuzzleIO } from "../../../utils/PuzzleIO.ts";
 import { IStrategy } from "../../PuzzleProcessor.ts";
 import { Matrix } from "../../../structures/Matrix.ts";
@@ -37,24 +35,26 @@ export class Day04Part01Strategy implements IStrategy {
     }
 
     for (const diagonal of matrix.diagonals) {
-      const plusMirror = diagonal.join("") + diagonal.toReversed().join("");
+      const plusMirror = diagonal.diagonal.join("") +
+        diagonal.diagonal.toReversed().join("");
       const matches = plusMirror.match(xmasMatcher);
       const numMatches = matches?.length || 0;
       console.debug(
-        `Num matches diagonal ${diagonal.join("")}:\n\t${numMatches}`,
+        `Num matches diagonal ${diagonal.diagonal.join("")}:\n\t${numMatches}`,
       );
       xmasMatches += numMatches;
     }
 
-    // Flip matrix horizontally and vertically and run on diagonals again
+    // Flip matrix horizontally and run on diagonals again
     const transposed = matrix.mirrorHorizontally();
     for (const diagonal of transposed.diagonals) {
-      const plusMirror = diagonal.join("") + diagonal.toReversed().join("");
+      const plusMirror = diagonal.diagonal.join("") +
+        diagonal.diagonal.toReversed().join("");
       const matches = plusMirror.match(xmasMatcher);
       const numMatches = matches?.length || 0;
       console.debug(
         `Num matches (transposed) diagonal ${
-          diagonal.join("")
+          diagonal.diagonal.join("")
         }:\n\t${numMatches}`,
       );
       xmasMatches += numMatches;

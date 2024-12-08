@@ -73,11 +73,11 @@ Deno.test("MatrixTest", async (t) => {
     const matrix = new Matrix(_.cloneDeep(defaultMatrix));
     const diagonals = Array.from(matrix.diagonals);
     expect(diagonals).toEqual([
-      ["a", "e", "i"],
-      ["b", "f"],
-      ["d", "h"],
-      ["c"],
-      ["g"],
+      { startingRow: 2, startingColumn: 0, diagonal: ["g"] },
+      { startingRow: 1, startingColumn: 0, diagonal: ["d", "h"] },
+      { startingRow: 0, startingColumn: 0, diagonal: ["a", "e", "i"] },
+      { startingRow: 0, startingColumn: 1, diagonal: ["b", "f"] },
+      { startingRow: 0, startingColumn: 2, diagonal: ["c"] },
     ]);
   });
 
@@ -119,12 +119,36 @@ Deno.test("MatrixTest", async (t) => {
 
   await t.step("Should get the correct diagonal", () => {
     const matrix = new Matrix(_.cloneDeep(defaultMatrix));
-    expect(matrix.getDiagonal(0, 0)).toEqual(["a", "e", "i"]);
-    expect(matrix.getDiagonal(1, 1)).toEqual(["e", "i"]);
-    expect(matrix.getDiagonal(0, 1)).toEqual(["b", "f"]);
-    expect(matrix.getDiagonal(1, 0)).toEqual(["d", "h"]);
-    expect(matrix.getDiagonal(0, 2)).toEqual(["c"]);
-    expect(matrix.getDiagonal(2, 0)).toEqual(["g"]);
+    expect(matrix.getDiagonal(0, 0)).toEqual({
+      startingRow: 0,
+      startingColumn: 0,
+      diagonal: ["a", "e", "i"],
+    });
+    expect(matrix.getDiagonal(1, 1)).toEqual({
+      startingRow: 1,
+      startingColumn: 1,
+      diagonal: ["e", "i"],
+    });
+    expect(matrix.getDiagonal(0, 1)).toEqual({
+      startingRow: 0,
+      startingColumn: 1,
+      diagonal: ["b", "f"],
+    });
+    expect(matrix.getDiagonal(1, 0)).toEqual({
+      startingRow: 1,
+      startingColumn: 0,
+      diagonal: ["d", "h"],
+    });
+    expect(matrix.getDiagonal(0, 2)).toEqual({
+      startingRow: 0,
+      startingColumn: 2,
+      diagonal: ["c"],
+    });
+    expect(matrix.getDiagonal(2, 0)).toEqual({
+      startingRow: 2,
+      startingColumn: 0,
+      diagonal: ["g"],
+    });
   });
 
   await t.step("Should transpose the square matrix", () => {

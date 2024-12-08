@@ -1,18 +1,24 @@
 // @ts-types="npm:@types/lodash"
 import _ from "npm:lodash";
 
+export interface MatrixDiagonal<T> {
+  startingRow: number;
+  startingColumn: number;
+  diagonal: T[];
+}
+
 export interface IMatrix<T> {
   numRows: number;
   numColumns: number;
   isSquare: boolean;
-  rows: Iterable<T[]>;
-  columns: Iterable<T[]>;
-  diagonals: Iterable<T[]>;
+  rows: T[][];
+  columns: T[][];
+  diagonals: MatrixDiagonal<T>[];
   get(row: number, col: number): T;
   set(row: number, col: number, value: T): void;
   getRow(row: number): T[];
   getColumn(col: number): T[];
-  getDiagonal(row: number, col: number): T[];
+  getDiagonal(row: number, col: number): MatrixDiagonal<T>;
   transpose(): IMatrix<T>;
   mirrorVertically(): IMatrix<T>;
   mirrorHorizontally(): IMatrix<T>;
@@ -53,24 +59,32 @@ export class Matrix<T> implements IMatrix<T> {
     return new Matrix(data);
   }
 
-  get rows(): Iterable<T[]> {
+  get rows(): T[][] {
     return this.data;
   }
 
-  get columns(): Iterable<T[]> {
+  get columns(): T[][] {
     return this.data[0].map((_, i) => this.data.map((row) => row[i]));
   }
 
-  get diagonals(): Iterable<T[]> {
+  get diagonals(): MatrixDiagonal<T>[] {
     if (!this.isSquare) {
       // TODO, for now we only support square matrices
       throw new Error("Matrix must be square to get its diagonals!");
     }
-    const diagonals = [];
+    const diagonals: MatrixDiagonal<T>[] = [];
     for (let i = 0; i < Math.min(this.numColumns, this.numRows); i++) {
-      diagonals.push(this.getDiagonal(0, i));
+      diagonals.push({
+        startingRow: 0,
+        startingColumn: i,
+        diagonal: this.getDiagonal(0, i).diagonal,
+      });
       if (i > 0) {
-        diagonals.push(this.getDiagonal(i, 0));
+        diagonals.unshift({
+          startingRow: i,
+          startingColumn: 0,
+          diagonal: this.getDiagonal(i, 0).diagonal,
+        });
       }
     }
     return diagonals;
@@ -98,7 +112,7 @@ export class Matrix<T> implements IMatrix<T> {
     return this.data.map((row) => row[col]);
   }
 
-  getDiagonal(row: number, col: number): T[] {
+  getDiagonal(row: number, col: number): MatrixDiagonal<T> {
     const diagonal = [];
     for (let i = 0; i < Math.min(this.numColumns, this.numRows); i++) {
       if (row + i >= this.numRows || col + i >= this.numColumns) {
@@ -106,7 +120,11 @@ export class Matrix<T> implements IMatrix<T> {
       }
       diagonal.push(this.data[row + i][col + i]);
     }
-    return diagonal;
+    return {
+      startingRow: row,
+      startingColumn: col,
+      diagonal,
+    };
   }
 
   transpose(): Matrix<T> {
