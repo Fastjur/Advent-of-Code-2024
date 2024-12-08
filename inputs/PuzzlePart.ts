@@ -1,6 +1,7 @@
 export enum PuzzlePart {
   PART_01 = "part01",
   PART_02 = "part02",
+  SMALL = "small",
 }
 
 export function isValidPart(part: string): part is PuzzlePart {

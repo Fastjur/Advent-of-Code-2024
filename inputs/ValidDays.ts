@@ -2,6 +2,7 @@ export enum ValidDays {
   DAY_01 = "day01",
   DAY_02 = "day02",
   DAY_03 = "day03",
+  DAY_04 = "day04",
 }
 
 export function isValidDay(day: string): day is ValidDays {
