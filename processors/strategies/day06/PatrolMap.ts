@@ -35,6 +35,7 @@ export class MapNode {
 export class PatrolMap {
   private readonly nodes: MapNode[][] = [];
   public guardWalkedOff = false;
+  private visitedNodesAtDirection: Map<string, true> = new Map();
 
   constructor(private readonly logger: ILogger, input: string) {
     const lines = input.split("\n");
@@ -61,26 +62,53 @@ export class PatrolMap {
     return `${headerString}\n${nodesString}`;
   }
 
-  public getGuards(): Guard[] {
-    const guards: Guard[] = [];
+  public getGuard(): Guard {
     for (let y = 0; y < this.nodes.length; y++) {
       for (let x = 0; x < this.nodes[y].length; x++) {
         const node = this.nodes[y][x];
         if (node.type === MapNodeType.GuardUp) {
-          guards.push(new Guard(this.logger, x, y, GuardDirection.UP, this));
+          return new Guard(
+            this.logger,
+            x,
+            y,
+            GuardDirection.UP,
+            this,
+            this.visitedNodesAtDirection,
+          );
         }
         if (node.type === MapNodeType.GuardDown) {
-          guards.push(new Guard(this.logger, x, y, GuardDirection.DOWN, this));
+          return new Guard(
+            this.logger,
+            x,
+            y,
+            GuardDirection.DOWN,
+            this,
+            this.visitedNodesAtDirection,
+          );
         }
         if (node.type === MapNodeType.GuardLeft) {
-          guards.push(new Guard(this.logger, x, y, GuardDirection.LEFT, this));
+          return new Guard(
+            this.logger,
+            x,
+            y,
+            GuardDirection.LEFT,
+            this,
+            this.visitedNodesAtDirection,
+          );
         }
         if (node.type === MapNodeType.GuardRight) {
-          guards.push(new Guard(this.logger, x, y, GuardDirection.RIGHT, this));
+          return new Guard(
+            this.logger,
+            x,
+            y,
+            GuardDirection.RIGHT,
+            this,
+            this.visitedNodesAtDirection,
+          );
         }
       }
     }
-    return guards;
+    throw new Error("No guard found");
   }
 
   public isOutOfBounds(x: number, y: number): boolean {
@@ -94,6 +122,12 @@ export class PatrolMap {
 
   public setNode(x: number, y: number, type: MapNodeType): void {
     this.nodes[y][x].type = type;
+  }
+
+  public getNodesOfType(type: MapNodeType): MapNode[] {
+    return this.nodes.reduce((acc, line) => {
+      return acc.concat(line.filter((node) => node.type === type));
+    }, []);
   }
 
   public countNodesOfType(type: MapNodeType): number {

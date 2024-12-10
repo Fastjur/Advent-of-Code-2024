@@ -8,10 +8,22 @@ export enum GuardDirection {
   RIGHT = ">",
 }
 
+export class AlreadyVisitedError implements Error {
+  constructor(s: string) {
+    Object.setPrototypeOf(this, new.target.prototype);
+    this.message = s;
+    this.name = "AlreadyVisitedError";
+  }
+
+  message: string;
+  name: string;
+}
+
 export class Guard {
   private _x: number;
   private _y: number;
   private _direction: GuardDirection;
+  private visitedNodesAtDirections: Map<string, true>;
   public readonly map: PatrolMap;
 
   constructor(
@@ -20,11 +32,13 @@ export class Guard {
     y: number,
     direction: GuardDirection,
     map: PatrolMap,
+    visitedNodesAtDirections: Map<string, true>,
   ) {
     this._y = y;
     this._x = x;
     this._direction = direction;
     this.map = map;
+    this.visitedNodesAtDirections = visitedNodesAtDirections;
   }
 
   toString(): string {
@@ -73,8 +87,24 @@ export class Guard {
     }
   }
 
-  public updateMapWithPosition(): void {
+  private updateMapWithPosition(): void {
     this.map.setNode(this._x, this._y, this.getMapNodeTypeFromDirection());
+  }
+
+  private checkIfAlreadyVisited(
+    x: number,
+    y: number,
+    direction: GuardDirection,
+  ): void {
+    const key = `${x},${y},${direction}`;
+    this.logger.debug(`Checking if already visited ${key}`);
+    if (this.visitedNodesAtDirections.has(key)) {
+      throw new AlreadyVisitedError(`Already visited (${this._y}, ${this._x})`);
+    }
+    this.visitedNodesAtDirections.set(
+      key,
+      true,
+    );
   }
 
   public walk(): void {
@@ -104,8 +134,10 @@ export class Guard {
     } else if (this.map.isObstructed(newX, newY)) {
       this.logger.debug(`Obstructed path at ${newY} ${newX}, turning right`);
       this.turnRight();
+      this.checkIfAlreadyVisited(newX, newY, this._direction);
       this.updateMapWithPosition();
     } else {
+      this.checkIfAlreadyVisited(newX, newY, this._direction);
       this.map.setNode(this._x, this._y, MapNodeType.Visited);
       this._x = newX;
       this._y = newY;

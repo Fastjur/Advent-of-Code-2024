@@ -13,10 +13,8 @@ export class Day06Part01Strategy implements IStrategy {
     let i = 0;
     while (!map.guardWalkedOff) {
       this.logger.debug(`\n\nIteration ${i}`);
-      const guards = map.getGuards();
-      guards.forEach((guard) => {
-        guard.walk();
-      });
+      const guard = map.getGuard();
+      guard.walk();
       this.logger.debug(map.toString());
       i++;
     }

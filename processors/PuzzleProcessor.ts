@@ -60,7 +60,7 @@ export class PuzzleProcessor implements IPuzzleProcessor {
       case ValidDays.DAY_06:
         return part === PuzzlePart.PART_01
           ? new Day06Part01Strategy(this.logger)
-          : new Day06Part02Strategy();
+          : new Day06Part02Strategy(this.logger);
       default:
         throw new Error(`Strategy not implemented for day: ${day}`);
     }
