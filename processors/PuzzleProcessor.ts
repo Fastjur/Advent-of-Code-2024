@@ -10,17 +10,27 @@ import { Day04Part01Strategy } from "./strategies/day04/Day04Part01Strategy.ts";
 import { Day04Part02Strategy } from "./strategies/day04/Day04Part02Strategy.ts";
 import { Day05Part01Strategy } from "./strategies/day05/Day05Part01Strategy.ts";
 import { Day05Part02Strategy } from "./strategies/day05/Day05Part02Strategy.ts";
+import { Day06Part01Strategy } from "./strategies/day06/Day06Part01Strategy.ts";
+import { Day06Part02Strategy } from "./strategies/day06/Day06Part02Strategy.ts";
+import { ConsoleLogger, ILogger } from "../utils/Logger.ts";
 
 export interface IPuzzleProcessor {
-  process(day: ValidDays, part: PuzzlePart, input: string): string;
+  process(day: ValidDays, part: PuzzlePart, input: string): Promise<string>;
 }
 
 export interface IStrategy {
-  execute(input: string): string;
+  execute(input: string): Promise<string>;
 }
 
 export class PuzzleProcessor implements IPuzzleProcessor {
-  process(day: ValidDays, part: PuzzlePart, input: string): string {
+  constructor(private readonly logger: ILogger) {
+  }
+
+  process(
+    day: ValidDays,
+    part: PuzzlePart,
+    input: string,
+  ): Promise<string> {
     const strategy = this.getStrategy(day, part);
     return strategy.execute(input);
   }
@@ -47,6 +57,10 @@ export class PuzzleProcessor implements IPuzzleProcessor {
         return part === PuzzlePart.PART_01
           ? new Day05Part01Strategy()
           : new Day05Part02Strategy();
+      case ValidDays.DAY_06:
+        return part === PuzzlePart.PART_01
+          ? new Day06Part01Strategy(this.logger)
+          : new Day06Part02Strategy();
       default:
         throw new Error(`Strategy not implemented for day: ${day}`);
     }

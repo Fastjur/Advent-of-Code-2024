@@ -2,6 +2,7 @@ import { getDay, ValidDays } from "./inputs/ValidDays.ts";
 import { PuzzleIO } from "./utils/PuzzleIO.ts";
 import { PuzzleProcessor } from "./processors/PuzzleProcessor.ts";
 import { getPart, PuzzlePart } from "./inputs/PuzzlePart.ts";
+import { ConsoleLogger } from "./utils/Logger.ts";
 
 function getInput(
   day: ValidDays,
@@ -30,9 +31,12 @@ if (import.meta.main) {
 
   const input = getInput(day, part, useSample, useSmall);
 
-  const processor = new PuzzleProcessor();
+  const processor = new PuzzleProcessor(new ConsoleLogger(useSample));
   console.time("Execution time");
-  const result = processor.process(day, part, input);
+  const result = await processor.process(day, part, input);
+  console.log("\n\n==== RESULT ====");
+  console.log(result);
+  console.log("==== END ====\n");
   console.timeEnd("Execution time");
   PuzzleIO.writeOutput(day, part, useSample, useSmall, result);
 }

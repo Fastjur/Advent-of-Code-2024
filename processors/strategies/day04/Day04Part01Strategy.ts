@@ -3,7 +3,7 @@ import { IStrategy } from "../../PuzzleProcessor.ts";
 import { Matrix } from "../../../structures/Matrix.ts";
 
 export class Day04Part01Strategy implements IStrategy {
-  execute(input: string): string {
+  execute(input: string): Promise<string> {
     const lines = PuzzleIO.splitLines(input);
     const matrix = new Matrix(lines.map((line) => {
       return line.split("");
@@ -61,6 +61,6 @@ export class Day04Part01Strategy implements IStrategy {
     }
 
     console.log("Total XMAS matches:", xmasMatches);
-    return xmasMatches.toString();
+    return Promise.resolve(xmasMatches.toString());
   }
 }

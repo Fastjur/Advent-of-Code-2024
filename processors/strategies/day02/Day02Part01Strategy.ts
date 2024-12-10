@@ -2,7 +2,7 @@ import { IStrategy } from "../../PuzzleProcessor.ts";
 import { PuzzleIO } from "../../../utils/PuzzleIO.ts";
 
 export class Day02Part01Strategy implements IStrategy {
-  execute(input: string): string {
+  execute(input: string): Promise<string> {
     const reports = PuzzleIO.splitLines(input);
     let safeReports = 0;
     for (const report of reports) {
@@ -40,6 +40,6 @@ export class Day02Part01Strategy implements IStrategy {
       }
     }
     console.log(safeReports);
-    return safeReports.toString();
+    return Promise.resolve(safeReports.toString());
   }
 }

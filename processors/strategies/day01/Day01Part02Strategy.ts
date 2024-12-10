@@ -4,7 +4,7 @@ import { PuzzleIO } from "../../../utils/PuzzleIO.ts";
 import _ from "npm:lodash";
 
 export class Day01Part02Strategy implements IStrategy {
-  execute(input: string): string {
+  execute(input: string): Promise<string> {
     const lines = PuzzleIO.splitLines(input).map((line) =>
       line.split(/\W+/).map((num) => parseInt(num))
     );
@@ -26,6 +26,6 @@ export class Day01Part02Strategy implements IStrategy {
       similarityScore += firstNumber * appearancesInSecondColumn;
     }
     console.log(similarityScore);
-    return similarityScore.toString();
+    return Promise.resolve(similarityScore.toString());
   }
 }

@@ -14,7 +14,7 @@ class PageOrderingRule {
 }
 
 export class Day05Part02Strategy implements IStrategy {
-  execute(input: string): string {
+  execute(input: string): Promise<string> {
     const lines = PuzzleIO.splitLines(input);
     const partSplitIdx = lines.indexOf("");
     const pageOrderingRules = lines.slice(0, partSplitIdx).map((line) => {
@@ -88,7 +88,7 @@ export class Day05Part02Strategy implements IStrategy {
     console.log("Middle numbers:", middleNumbers);
     const summed = _.sum(middleNumbers);
     console.log("Summed:", summed);
-    return summed.toString();
+    return Promise.resolve(summed.toString());
   }
 
   private isValidUpdate(

@@ -3,7 +3,7 @@ import _ from "npm:lodash";
 import { IStrategy } from "../../PuzzleProcessor.ts";
 
 export class Day03Part02Strategy implements IStrategy {
-  execute(input: string): string {
+  execute(input: string): Promise<string> {
     const doRegex = /do(?!n)/gmd;
     const dontRegex = /don't/gmd;
     const allDoMatches = input.matchAll(doRegex);
@@ -41,7 +41,7 @@ export class Day03Part02Strategy implements IStrategy {
       total += firstNum * secondNum;
     }
     console.log(total);
-    return total.toString();
+    return Promise.resolve(total.toString());
   }
 
   private getIndices(

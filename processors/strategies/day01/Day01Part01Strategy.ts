@@ -4,7 +4,7 @@ import { PuzzleIO } from "../../../utils/PuzzleIO.ts";
 import _ from "npm:lodash";
 
 export class Day01Part01Strategy implements IStrategy {
-  execute(input: string): string {
+  execute(input: string): Promise<string> {
     const lines = PuzzleIO.splitLines(input).map((line) =>
       line.split(/\W+/).map((num) => parseInt(num))
     );
@@ -15,6 +15,6 @@ export class Day01Part01Strategy implements IStrategy {
     );
     const sum = _.sum(distances);
     console.log(sum);
-    return sum.toString();
+    return Promise.resolve(sum.toString());
   }
 }

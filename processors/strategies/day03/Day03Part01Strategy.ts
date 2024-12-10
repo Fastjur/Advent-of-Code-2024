@@ -3,7 +3,7 @@ import { IStrategy } from "../../PuzzleProcessor.ts";
 import _ from "npm:lodash";
 
 export class Day03Part01Strategy implements IStrategy {
-  execute(input: string): string {
+  execute(input: string): Promise<string> {
     const mulRegex = /mul\((\d{1,3}),(\d{1,3})\)/gm;
     const allMatches = input.matchAll(mulRegex);
     let total = 0;
@@ -16,6 +16,6 @@ export class Day03Part01Strategy implements IStrategy {
       total += firstNum * secondNum;
     }
     console.log(total);
-    return total.toString();
+    return Promise.resolve(total.toString());
   }
 }
