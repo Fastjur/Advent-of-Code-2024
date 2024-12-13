@@ -1,14 +1,16 @@
 export enum Operator {
   ADD = "+",
   MULTIPLY = "*",
+  CONCATENATE = "||",
 }
 export type EquationNumber = number;
 
 export function isOperator(value: unknown): value is Operator {
-  return value === Operator.ADD || value === Operator.MULTIPLY;
+  return value === Operator.ADD || value === Operator.MULTIPLY ||
+    value === Operator.CONCATENATE;
 }
 
-export function isNumber(value: unknown): value is EquationNumber {
+export function isEquationNumber(value: unknown): value is EquationNumber {
   return typeof value === "number";
 }
 
@@ -61,14 +63,18 @@ export class Equation {
     let result = 0;
     let previous: EquationNumber | Operator | null = null;
     for (const numberOrOperator of this.equationArray) {
-      if (isNumber(numberOrOperator)) {
+      if (isEquationNumber(numberOrOperator)) {
         if (previous === null) {
           result = numberOrOperator;
-        } else if (isOperator(previous)) {
+          continue;
+        }
+        if (isOperator(previous)) {
           if (previous === Operator.ADD) {
             result += numberOrOperator;
           } else if (previous === Operator.MULTIPLY) {
             result *= numberOrOperator;
+          } else if (previous === Operator.CONCATENATE) {
+            result = parseInt(`${result}${numberOrOperator}`);
           } else {
             throw new Error(`Invalid operator: ${previous}`);
           }
